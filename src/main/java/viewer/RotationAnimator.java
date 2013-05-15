@@ -1,10 +1,10 @@
 package viewer;
 
-import viewer.util.AbstractAnimator;
 import net.imglib2.realtransform.AffineTransform3D;
 import net.imglib2.util.LinAlgHelpers;
+import viewer.util.AbstractTransformAnimator;
 
-class RotationAnimator extends AbstractAnimator
+class RotationAnimator extends AbstractTransformAnimator
 {
 	private final AffineTransform3D transformStart;
 
@@ -31,12 +31,6 @@ class RotationAnimator extends AbstractAnimator
 		if ( qAddEnd[ 0 ] < 0 )
 			for ( int i = 0; i < 4; ++i )
 				qAddEnd[ i ] = -qAddEnd[ i ];
-	}
-
-	public AffineTransform3D getCurrent( final long time )
-	{
-		setTime( time );
-		return get( ratioComplete() );
 	}
 
 	public static void extractRotation( final AffineTransform3D transform, final double[] q )
@@ -75,10 +69,8 @@ class RotationAnimator extends AbstractAnimator
 		LinAlgHelpers.quaternionFromR( m, q );
 	}
 
-	/**
-	 * @param t from 0 to 1
-	 */
-	private AffineTransform3D get( final double t )
+	@Override
+	protected AffineTransform3D get( final double t )
 	{
 		final AffineTransform3D transform = new AffineTransform3D();
 		transform.set( transformStart );
