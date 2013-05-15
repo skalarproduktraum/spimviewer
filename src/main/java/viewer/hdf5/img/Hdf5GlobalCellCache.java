@@ -14,7 +14,7 @@ public class Hdf5GlobalCellCache< A >
 
 	final int maxNumLevels;
 
-	class Key
+	protected class Key
 	{
 		final int timepoint;
 
@@ -56,7 +56,7 @@ public class Hdf5GlobalCellCache< A >
 		}
 	}
 
-	class Entry
+	protected class Entry
 	{
 		final protected Key key;
 
@@ -66,6 +66,11 @@ public class Hdf5GlobalCellCache< A >
 		{
 			this.key = key;
 			this.data = data;
+		}
+
+		public Hdf5Cell< A > getData()
+		{
+			return data;
 		}
 
 		@Override
