@@ -5,6 +5,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.FutureTask;
 
+import viewer.hdf5.img.CacheIoTiming;
+import viewer.hdf5.img.CacheIoTiming.IoStatistics;
 import viewer.hdf5.img.Hdf5Cell;
 import viewer.hdf5.img.Hdf5GlobalCellCache;
 
@@ -39,22 +41,23 @@ public class HttpGlobalCellCache< A > extends Hdf5GlobalCellCache< A >
 				@Override
 				public Hdf5Cell< A > call() throws Exception
 				{
-//					final IoStatistics statistics = getThreadGroupIoStatistics();
-//					if ( statistics.timeoutReached() )
-//					{
-//						statistics.timeoutCallback();
-//						return new Hdf5Cell< A >( cellDims, cellMin, loader.emptyArray( cellDims ) );
-//					}
+					final IoStatistics statistics = CacheIoTiming.getThreadGroupIoStatistics();
+					if ( statistics.timeoutReached() )
+					{
+						statistics.timeoutCallback();
+						requestCache.remove( k );
+						return new Hdf5Cell< A >( cellDims, cellMin, loader.emptyArray( cellDims ) );
+					}
 
-//					statistics.stopWatch.start();
+					statistics.start();
 					final Hdf5Cell< A > cell = new Hdf5Cell< A >( cellDims, cellMin, loader.loadArray( index, timepoint, setup, level, cellDims, cellMin ) );
 					softReferenceCache.put( k, new SoftReference< Entry >( new Entry( k, cell ) ) );
-//					statistics.stopWatch.stop();
+					statistics.stop();
 
 					int c = loader.getBytesPerElement();
 					for ( final int l : cellDims )
 						c *= l;
-//					statistics.ioBytes += c;
+					statistics.incIoBytes( c );
 
 					requestCache.remove( k );
 					return cell;

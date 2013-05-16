@@ -29,8 +29,9 @@ public class CellServer
 {
 	public static void main( final String[] args ) throws Exception
 	{
-		final Server server = new Server( 8010 );
-		server.setHandler( new CellHandler( "/Users/pietzsch/Desktop/Valia/valia.xml" ) );
+		final String fn = args.length > 0 ? args[ 0 ] : "/Users/pietzsch/Desktop/Valia/valia.xml";
+		final Server server = new Server( 8080 );
+		server.setHandler( new CellHandler( fn ) );
 		server.start();
 		server.join();
 	}
@@ -82,32 +83,32 @@ public class CellServer
 					cell = cache.loadGlobal( cellDims, cellMin, timepoint, setup, level, index );
 				}
 				final short[] data = cell.getData().getCurrentStorageArray();
+				final byte[] buf = new byte[ 2 * data.length ];
+				for ( int i = 0, j = 0; i < data.length; i++ )
+				{
+					final short s = data[ i ];
+					buf[ j++ ] = ( byte ) ( ( s >> 8 ) & 0xff );
+					buf[ j++ ] = ( byte ) ( s & 0xff );
+				}
 
 				response.setContentType( "application/octet-stream" );
+				response.setContentLength( buf.length );
 				response.setStatus( HttpServletResponse.SC_OK );
 				baseRequest.setHandled( true );
 				final OutputStream os = response.getOutputStream();
-
-				final int BUF_LENGTH = 10000;
-				final byte[] buf = new byte[ BUF_LENGTH ];
-				int i = 0;
-				while ( i < data.length )
-				{
-					int j = 0;
-					for ( ; j < BUF_LENGTH && i < data.length; i++ )
-					{
-						final short s = data[ i ];
-						buf[ j++ ] = ( byte ) ( ( s >> 8 ) & 0xff );
-						buf[ j++ ] = ( byte ) ( s & 0xff );
- 					}
-					os.write( buf, 0, j );
-				}
-
+				os.write( buf );
 				os.close();
+
+//				final byte[] buf = new byte[ 4096 ];
+//				for ( int i = 0, l = Math.min( buf.length / 2, data.length - i ); i < data.length; i += l )
+//				{
+//					ByteBuffer.wrap( buf ).asShortBuffer().put( data, i, l );
+//					os.write( buf, 0, 2 * l );
+//				}
+//				os.close();
 			}
 			else if ( parts[ 0 ].equals( "dim" ) )
 			{
-				System.out.println( cellString );
 				final int timepoint = Integer.parseInt( parts[ 1 ] );
 				final int setup = Integer.parseInt( parts[ 2 ] );
 				final int level = Integer.parseInt( parts[ 3 ] );
