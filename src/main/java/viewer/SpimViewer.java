@@ -674,8 +674,12 @@ public class SpimViewer implements OverlayRenderer, TransformListener3D, Painter
                     rotation.set( rotation.get( 0, 3 ) - frame.getWidth()/2., 0, 3 );
                     rotation.set( rotation.get( 1, 3 ) - frame.getHeight()/2, 1, 3 );
 
+                    // zoom / Z translation
+                    rotation.set( rotation.get( 2, 3 ) - handTranslation.getZ(), 2, 3 );
+
                     // rotation - InteractiveDisplay3DCanvas' and Leap Motion's coordinate systems
                     // are different!
+                    // TODO: rotate around center of the image, not origin of image.
                     double xAngle = -handTranslation.getX() * Math.PI/180.0f;
                     double yAngle = -handTranslation.getY() * Math.PI/180.0f;
 
