@@ -608,7 +608,7 @@ public class SpimViewer implements OverlayRenderer, TransformListener3D, Painter
     protected class LeapMotionListener extends Listener
     {
         private boolean debug = true;
-        Frame previousLeapFrame = null;
+        Frame previousLeapFrame = Frame.invalid();
 
         protected void debugPrint(String text) {
             if (this.debug) {
@@ -616,94 +616,88 @@ public class SpimViewer implements OverlayRenderer, TransformListener3D, Painter
             }
         }
         public void onInit(Controller controller) {
-            debugPrint("Initialized");
+            debugPrint("Initialized controller.");
         }
 
         public void onConnect(Controller controller) {
             debugPrint("LeapMotionListener: Connected");
+            /*
             controller.enableGesture(Gesture.Type.TYPE_SWIPE);
             controller.enableGesture(Gesture.Type.TYPE_CIRCLE);
             controller.enableGesture(Gesture.Type.TYPE_SCREEN_TAP);
             controller.enableGesture(Gesture.Type.TYPE_KEY_TAP);
+            */
         }
 
         public void onDisconnect(Controller controller) {
             //Note: not dispatched when running in a debugger.
-            debugPrint("Disconnected");
+            debugPrint("Disconnected.");
         }
 
         public void onExit(Controller controller) {
-            debugPrint("Exited");
+            debugPrint("Exited.");
         }
 
         public void onFrame(Controller controller) {
-            // Get the most recent frame and report some basic information
-            Frame frame = controller.frame();
-            /*debugPrint("Frame id: " + frame.id()
-                    + ", timestamp: " + frame.timestamp()
-                    + ", hands: " + frame.hands().count()
-                    + ", fingers: " + frame.fingers().count()
-                    + ", tools: " + frame.tools().count()
-                    + ", gestures " + frame.gestures().count());*/
+            // get most recent Leap Motion frame
+            Frame leapFrame = controller.frame();
 
-            if (!frame.hands().empty()) {
-                // Get the first hand
-                Hand hand = frame.hands().get(0);
+            // get first hand from frame
+            Hand hand = leapFrame.hands().get(0);
 
-                // Check if the hand has any fingers
-                FingerList fingers = hand.fingers();
-                if (!fingers.empty()) {
-                    // Calculate the hand's average finger tip position
-                    Vector avgPos = Vector.zero();
-                    for (Finger finger : fingers) {
-                        avgPos = avgPos.plus(finger.tipPosition());
-                    }
-                    avgPos = avgPos.divide(fingers.count());
-                    //debugPrint("Hand has " + fingers.count()
-                    //        + " fingers, average finger tip position: " + avgPos);
+            if (!leapFrame.hands().empty()) {
+
+                // if first hand is closed, skip the frame to enable the user to
+                // move the hand out of the control area without further movement
+                if(hand.fingers().count() < 1) {
+                    previousLeapFrame = Frame.invalid();
+                    return;
                 }
-
-                // Get the hand's sphere radius and palm position
-                //debugPrint("Hand sphere radius: " + hand.sphereRadius()
-                //        + " mm, palm position: " + hand.palmPosition());
-
-                // Get the hand's normal vector and direction
-                Vector normal = hand.palmNormal();
-                Vector direction = hand.direction();
-
-                // Calculate the hand's pitch, roll, and yaw angles
-                /*debugPrint("Hand pitch: " + Math.toDegrees(direction.pitch()) + " degrees, "
-                        + "roll: " + Math.toDegrees(normal.roll()) + " degrees, "
-                        + "yaw: " + Math.toDegrees(direction.yaw()) + " degrees");*/
 
                 AffineTransform3D rotation = new AffineTransform3D();
                 AffineTransform3D origin = new AffineTransform3D();
 
+                // get current affine transformation matrix
                 origin.set(display.getTransformEventHandler().getTransform());
 
                 Vector handTranslation = hand.translation(previousLeapFrame);
+
+                // if hand displacement is below a certain threshold, ignore it to remove
+                // unnecessary jitter in movement
                 if(Math.abs(handTranslation.getX()) > 40.0 || Math.abs(handTranslation.getY()) > 40.0 || Math.abs(handTranslation.getZ()) > 40) {
-                    previousLeapFrame = null;
+                    previousLeapFrame = Frame.invalid();
                     return;
                 } else {
                     rotation.set(origin);
 
-                    // center shift?
-                    double xAngle = hand.rotationAngle(previousLeapFrame, normal);//handTranslation.getX() * Math.PI/180.0f;
-                    double yAngle = hand.rotationAngle(previousLeapFrame, direction);//-handTranslation.getY() * Math.PI/180.0f;
-                    double totalRotation = Math.sqrt(xAngle*xAngle + yAngle*yAngle);
-                    rotation.rotate(0, yAngle/totalRotation);
-                    rotation.rotate(1, xAngle/totalRotation);
+                    // center shift, TODO: check if this has to be done for Z as well?
+                    rotation.set( rotation.get( 0, 3 ) - frame.getWidth()/2., 0, 3 );
+                    rotation.set( rotation.get( 1, 3 ) - frame.getHeight()/2, 1, 3 );
 
+                    // zoom / Z translation
+                    rotation.set( rotation.get( 2, 3 ) - handTranslation.getZ(), 2, 3 );
+
+                    // rotation - InteractiveDisplay3DCanvas' and Leap Motion's coordinate systems
+                    // are different!
+                    // TODO: rotate around center of the image, not origin of image.
+                    double xAngle = -handTranslation.getX() * Math.PI/180.0f;
+                    double yAngle = -handTranslation.getY() * Math.PI/180.0f;
+
+                    rotation.rotate(0, yAngle);
+                    rotation.rotate(1, xAngle);
+
+                    // center un-shift
+                    rotation.set( rotation.get( 0, 3 ) + frame.getWidth()/2, 0, 3 );
+                    rotation.set( rotation.get( 1, 3 ) + frame.getHeight()/2, 1, 3 );
+
+                    // write out affine transform and apply
                     display.getTransformEventHandler().setTransform( rotation );
                     transformChanged( rotation );
                 }
             }
 
-            if (!frame.hands().empty()) {
-                debugPrint("");
-            }
-            previousLeapFrame = frame;
+            // save frame for further calculations
+            previousLeapFrame = leapFrame;
         }
 
     }
