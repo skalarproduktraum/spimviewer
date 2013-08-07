@@ -677,24 +677,27 @@ public class SpimViewer implements OverlayRenderer, TransformListener3D, Painter
                         + "yaw: " + Math.toDegrees(direction.yaw()) + " degrees");*/
 
                 AffineTransform3D rotation = new AffineTransform3D();
+                AffineTransform3D origin = new AffineTransform3D();
+
+                origin.set(display.getTransformEventHandler().getTransform());
 
                 Vector handTranslation = hand.translation(previousLeapFrame);
                 if(Math.abs(handTranslation.getX()) > 40.0 || Math.abs(handTranslation.getY()) > 40.0 || Math.abs(handTranslation.getZ()) > 40) {
                     previousLeapFrame = null;
                     return;
                 } else {
-                    double xAngle = handTranslation.getX() * Math.PI/180.0f;
-                    double yAngle = -handTranslation.getY() * Math.PI/180.0f;
+                    rotation.set(origin);
+
+                    // center shift?
+                    double xAngle = hand.rotationAngle(previousLeapFrame, normal);//handTranslation.getX() * Math.PI/180.0f;
+                    double yAngle = hand.rotationAngle(previousLeapFrame, direction);//-handTranslation.getY() * Math.PI/180.0f;
                     double totalRotation = Math.sqrt(xAngle*xAngle + yAngle*yAngle);
-                    rotation.rotate(0, xAngle/totalRotation);
-                    rotation.rotate(1, yAngle/totalRotation);
+                    rotation.rotate(0, yAngle/totalRotation);
+                    rotation.rotate(1, xAngle/totalRotation);
+
+                    display.getTransformEventHandler().setTransform( rotation );
+                    transformChanged( rotation );
                 }
-
-                display.getTransformEventHandler().setTransform( rotation );
-                transformChanged( rotation );
-
-                //display.update();
-
             }
 
             if (!frame.hands().empty()) {
