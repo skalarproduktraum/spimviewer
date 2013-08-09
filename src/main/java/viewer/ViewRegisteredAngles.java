@@ -309,7 +309,8 @@ public class ViewRegisteredAngles
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            System.out.println("Error while reading from " + cwd + "/default.xml");
+            System.out.println("Error while reading from " + cwd + "/default.xml:");
+            e.printStackTrace();
         }
 
         XPath xPath =  XPathFactory.newInstance().newXPath();
@@ -319,13 +320,12 @@ public class ViewRegisteredAngles
         try {
             String func = xPath.compile(viewRegisteredAnglesDefaultXPath + "function").evaluate(xmlDocument);
             String value = xPath.compile(viewRegisteredAnglesDefaultXPath + "value").evaluate(xmlDocument);
-            System.out.println("fn: " + func + ", " + value);
 
             if(func.equals("read_file")) {
                 System.out.println("Reading from file: " + value);
                 new ViewRegisteredAngles( value );
             } else {
-                System.out.println("Sorry, I don't know what to do! Please specify read_file action in " + cwd + "/default.xml");
+                System.out.println("Sorry, I don't know what to do!\nPlease specify read_file action in " + cwd + "/default.xml");
             }
 
         }
