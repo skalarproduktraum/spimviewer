@@ -41,9 +41,6 @@
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_STRING" value="-Djava.library.path=/Applications/Fiji.app/plugins" />
-  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>

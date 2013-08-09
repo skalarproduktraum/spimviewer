@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f5821ecb-c396-4f83-9a59-354f274a7d7b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/viewer/ViewRegisteredAngles.java" afterPath="$PROJECT_DIR$/src/main/java/viewer/ViewRegisteredAngles.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spim_viewer.ipr" afterPath="$PROJECT_DIR$/spim_viewer.ipr" />
     </list>
     <ignored path="spim_viewer.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -10,7 +11,9 @@
     <file path="/SpimViewer.java" changelist="f5821ecb-c396-4f83-9a59-354f274a7d7b" time="1375890024946" ignored="false" />
     <file path="/InteractiveDisplay3DCanvas.java" changelist="f5821ecb-c396-4f83-9a59-354f274a7d7b" time="1374654755342" ignored="false" />
     <file path="/ViewRegisteredAnglesPlugin.java" changelist="f5821ecb-c396-4f83-9a59-354f274a7d7b" time="1375880066236" ignored="false" />
-    <file path="/fragment.java" changelist="f5821ecb-c396-4f83-9a59-354f274a7d7b" time="1375991976608" ignored="false" />
+    <file path="/fragment.java" changelist="f5821ecb-c396-4f83-9a59-354f274a7d7b" time="1376037059134" ignored="false" />
+    <file path="/default.xml" changelist="f5821ecb-c396-4f83-9a59-354f274a7d7b" time="1376036418215" ignored="false" />
+    <file path="/ViewRegisteredAngles.java" changelist="f5821ecb-c396-4f83-9a59-354f274a7d7b" time="1376037591841" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,6 +21,11 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="Commander">
+    <leftPanel />
+    <rightPanel />
+    <splitter proportion="0.5" />
+  </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
@@ -83,7 +91,18 @@
       <file leaf-file-name="ViewRegisteredAngles.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/viewer/ViewRegisteredAngles.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="292" column="9" selection-start="9741" selection-end="9741" vertical-scroll-proportion="0.4618834">
+            <state line="303" column="13" selection-start="9948" selection-end="9948" vertical-scroll-proportion="0.39013454">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="default.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/default.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="3" column="66" selection-start="156" selection-end="156" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -102,15 +121,6 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/creator/ExportSpimFusionPlugIn.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="51" column="13" selection-start="1559" selection-end="1559" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ExportSpimSequencePlugIn.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/creator/ExportSpimSequencePlugIn.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="51" selection-start="578" selection-end="578" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -157,15 +167,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GuiHelpers.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/viewer/GuiHelpers.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="13" selection-start="462" selection-end="462" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FindManager">
@@ -192,6 +193,7 @@
         <option value="$PROJECT_DIR$/src/main/java/net/imglib/ui/component/InteractiveDisplay3DCanvas.java" />
         <option value="$PROJECT_DIR$/src/main/java/viewer/ViewRegisteredAnglesPlugin.java" />
         <option value="$PROJECT_DIR$/src/main/java/viewer/SpimViewer.java" />
+        <option value="$PROJECT_DIR$/default.xml" />
         <option value="$PROJECT_DIR$/src/main/java/viewer/ViewRegisteredAngles.java" />
       </list>
     </option>
@@ -202,6 +204,56 @@
         <option name="importAutomatically" value="true" />
       </MavenImportingSettings>
     </option>
+  </component>
+  <component name="MavenProjectNavigator">
+    <treeState>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="SPIM Viewer" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Dependencies" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$DependenciesNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="SPIM Viewer" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Plugins" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginsNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="imagej" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="SPIM Viewer" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Lifecycle" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$LifecycleNode" />
+        </PATH_ELEMENT>
+      </PATH>
+    </treeState>
   </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="22" />
@@ -589,15 +641,15 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24964131" sideWeight="0.6710875" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32936507" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32891247" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2496361" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998565" sideWeight="0.6710875" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24605452" sideWeight="0.6710875" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32891247" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -673,23 +725,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/net/imglib2/imglib2-ui/2.0.0-SNAPSHOT/imglib2-ui-2.0.0-20130724.051305-1268.jar!/net/imglib2/ui/TransformEventHandler3D.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="13" selection-start="157" selection-end="157" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/imglib/display/RealARGBColorConverter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="13" selection-start="207" selection-end="207" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/viewer/util/Affine3DHelpers.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="13" selection-start="370" selection-end="370" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/lib/LeapJava.jar!/com/leapmotion/leap/Matrix.class">
       <provider selected="true" editor-type-id="text-editor">
         <state line="28" column="19" selection-start="851" selection-end="851" vertical-scroll-proportion="0.0" />
@@ -773,10 +808,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/viewer/default.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Volumes/cartan/mpicbg/drosophilia/tiffs/export.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/default.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="66" selection-start="156" selection-end="156" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/viewer/ViewRegisteredAngles.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="292" column="9" selection-start="9741" selection-end="9741" vertical-scroll-proportion="0.4618834">
-          <folding />
+        <state line="303" column="13" selection-start="9948" selection-end="9948" vertical-scroll-proportion="0.39013454">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
