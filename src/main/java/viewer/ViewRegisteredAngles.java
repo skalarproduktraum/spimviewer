@@ -3,11 +3,22 @@ package viewer;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
+
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathFactory;
+
+import org.w3c.dom.Document;
+import java.io.IOException;
+import org.xml.sax.SAXException;
 
 import mpicbg.spim.data.SequenceDescription;
 import net.imglib.display.RealARGBColorConverter;
@@ -284,18 +295,42 @@ public class ViewRegisteredAngles
 
 	public static void main( final String[] args )
 	{
-//		final String fn = "/Users/tobias/workspace/data/fast fly/111010_weber/combined.xml";
-//		final String fn = "/Users/tobias/Desktop/openspim.xml";
-//		final String fn = "/Users/pietzsch/Desktop/data/fibsem.xml";
-//		final String fn = "/Users/pietzsch/Desktop/url-valia.xml";
-		final String fn = "/Users/pietzsch/Desktop/Valia/valia.xml";
-		try
-		{
-			new ViewRegisteredAngles( fn );
-		}
-		catch ( final Exception e )
-		{
-			e.printStackTrace();
-		}
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = null;
+        Document xmlDocument = null;
+
+        String cwd = System.getProperty("user.dir");
+
+        try {
+            builder = builderFactory.newDocumentBuilder();
+            xmlDocument = builder.parse(new FileInputStream("./default.xml"));
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Error while reading from " + cwd + "/default.xml");
+        }
+
+        XPath xPath =  XPathFactory.newInstance().newXPath();
+
+        String viewRegisteredAnglesDefaultXPath = "/actions/action[@type='ViewRegisteredAngles']/";
+
+        try {
+            String func = xPath.compile(viewRegisteredAnglesDefaultXPath + "function").evaluate(xmlDocument);
+            String value = xPath.compile(viewRegisteredAnglesDefaultXPath + "value").evaluate(xmlDocument);
+            System.out.println("fn: " + func + ", " + value);
+
+            if(func.equals("read_file")) {
+                System.out.println("Reading from file: " + value);
+                new ViewRegisteredAngles( value );
+            } else {
+                System.out.println("Sorry, I don't know what to do! Please specify read_file action in " + cwd + "/default.xml");
+            }
+
+        }
+        catch (final Exception e) {
+            e.printStackTrace();
+        }
 	}
 }

@@ -1,0 +1,8 @@
+<!-- copy this file to default.xml and modify the value to accomodate for 
+     the path where your SPIM data is -->
+<actions>
+    <action type="ViewRegisteredAngles">
+        <function>read_file</function>
+        <value>/path/to/SPIM\ data/export.xml</value>
+    </action>
+</actions>
