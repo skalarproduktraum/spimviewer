@@ -645,59 +645,72 @@ public class SpimViewer implements OverlayRenderer, TransformListener3D, Painter
             // get first hand from frame
             Hand hand = leapFrame.hands().get(0);
 
-            if (!leapFrame.hands().empty()) {
-
-                // if first hand is closed, skip the frame to enable the user to
-                // move the hand out of the control area without further movement
-                if(hand.fingers().count() < 1) {
-                    previousLeapFrame = Frame.invalid();
-                    return;
-                }
-
-                AffineTransform3D rotation = new AffineTransform3D();
-                AffineTransform3D origin = new AffineTransform3D();
-
-                // get current affine transformation matrix
-                origin.set(display.getTransformEventHandler().getTransform());
-
-                Vector handTranslation = hand.translation(previousLeapFrame);
-
-                // if hand displacement is below a certain threshold, ignore it to remove
-                // unnecessary jitter in movement
-                if(Math.abs(handTranslation.getX()) > 40.0 || Math.abs(handTranslation.getY()) > 40.0 || Math.abs(handTranslation.getZ()) > 40) {
-                    previousLeapFrame = Frame.invalid();
-                    return;
-                } else {
-                    rotation.set(origin);
-
-                    // center shift, TODO: check if this has to be done for Z as well?
-                    rotation.set( rotation.get( 0, 3 ) - frame.getWidth()/2., 0, 3 );
-                    rotation.set( rotation.get( 1, 3 ) - frame.getHeight()/2, 1, 3 );
-
-                    // zoom / Z translation
-                    rotation.set( rotation.get( 2, 3 ) - handTranslation.getZ(), 2, 3 );
-
-                    // rotation - InteractiveDisplay3DCanvas' and Leap Motion's coordinate systems
-                    // are different!
-                    // TODO: rotate around center of the image, not origin of image.
-                    double xAngle = -handTranslation.getX() * Math.PI/180.0f;
-                    double yAngle = -handTranslation.getY() * Math.PI/180.0f;
-
-                    rotation.rotate(0, yAngle);
-                    rotation.rotate(1, xAngle);
-
-                    // center un-shift
-                    rotation.set( rotation.get( 0, 3 ) + frame.getWidth()/2, 0, 3 );
-                    rotation.set( rotation.get( 1, 3 ) + frame.getHeight()/2, 1, 3 );
-
-                    // write out affine transform and apply
-                    display.getTransformEventHandler().setTransform( rotation );
-                    transformChanged( rotation );
-                }
+            // if first hand is closed, skip the frame to enable the user to
+            // move the hand out of the control area without further movement
+            if(hand.fingers().count() < 1) {
+                previousLeapFrame = Frame.invalid();
+                return;
             }
 
-            // save frame for further calculations
-            previousLeapFrame = leapFrame;
+            // if we have one hand, rotate
+            if (leapFrame.hands().count() == 1) {
+                AffineTransform3D origin = new AffineTransform3D();
+                AffineTransform3D transform = new AffineTransform3D();
+
+                double dX, dY, dZ;
+
+                Vector handTranslation = hand.translation(previousLeapFrame);
+                dX = handTranslation.getX();
+                dY = handTranslation.getY();
+                dZ = handTranslation.getZ();
+
+                // discard frame if movement is too large
+                if (Math.abs(dX) > 40.0 || Math.abs(dY) > 40.0 || Math.abs(dZ) > 40.0) {
+                    previousLeapFrame = Frame.invalid();
+                    return;
+                }
+
+                // initialize transformations
+                origin.set(display.getTransformEventHandler().getTransform());
+                transform.set(origin);
+
+                // three fingers moved = translation
+                if (hand.fingers().count() == 3) {
+                    transform.set(origin.get(0, 3) - (-2.0 * dX), 0, 3);
+                    transform.set(origin.get(1, 3) - 2.0 * dY, 1, 3);
+                    transform.set(origin.get(2, 3) - 2.0 * dZ, 2, 3);
+                }
+
+                // five fingers = rotation
+                if (hand.fingers().count() == 5) {
+                    // for rotation, we first have to shift our origin of rotation
+                    // to the center of the window, then rotate, then shift back:
+
+                    // center shift
+                    transform.set( transform.get( 0, 3 ) - frame.getWidth()/2., 0, 3 );
+                    transform.set( transform.get( 1, 3 ) - frame.getHeight()/2, 1, 3 );
+
+                    // zoom / Z translation
+                    transform.set( transform.get( 2, 3 ) - dZ, 2, 3 );
+
+                    // transform - InteractiveDisplay3DCanvas' and Leap Motion's coordinate systems
+                    // are different!
+                    double xAngle = -dX * Math.PI/180.0f;
+                    double yAngle = -dY * Math.PI/180.0f;
+
+                    transform.rotate(0, yAngle);
+                    transform.rotate(1, xAngle);
+
+                    // center un-shift
+                    transform.set( transform.get( 0, 3 ) + frame.getWidth()/2, 0, 3 );
+                    transform.set( transform.get( 1, 3 ) + frame.getHeight()/2, 1, 3 );
+                }
+
+                display.getTransformEventHandler().setTransform(transform);
+                transformChanged(transform);
+
+                previousLeapFrame = leapFrame;
+            }
         }
 
     }
