@@ -645,7 +645,47 @@ public class SpimViewer implements OverlayRenderer, TransformListener3D, Painter
             // get first hand from frame
             Hand hand = leapFrame.hands().get(0);
 
-            if (!leapFrame.hands().empty()) {
+            if(leapFrame.hands().count() == 2) {
+                Hand leftHand = leapFrame.hands().leftmost();
+                Hand rightHand = leapFrame.hands().rightmost();
+
+                AffineTransform3D origin = new AffineTransform3D();
+                AffineTransform3D translation = new AffineTransform3D();
+
+                double dX, dY, dZ;
+
+                // if both hands have 0 fingers, translate around
+                if(leftHand.fingers().count() == 0 && rightHand.fingers().count() == 0) {
+                    origin.set(display.getTransformEventHandler().getTransform());
+
+                    Vector leftHandTranslation = leftHand.translation(previousLeapFrame);
+                    Vector rightHandTranslation = rightHand.translation(previousLeapFrame);
+
+                    // discard frame if over certain threshold for both hands
+                    if(Math.abs(leftHandTranslation.getX()) > 40.0 || Math.abs(leftHandTranslation.getY()) > 40.0 || Math.abs(leftHandTranslation.getZ()) > 40 ||
+                        Math.abs(rightHandTranslation.getX()) > 40.0 || Math.abs(rightHandTranslation.getY()) > 40.0 || Math.abs(rightHandTranslation.getZ()) > 40) {
+                        previousLeapFrame = Frame.invalid();
+                        return;
+                    }
+
+                    translation.set(origin);
+
+                    dX = -2.0 * (leftHandTranslation.getX() + rightHandTranslation.getX())/2.0;
+                    dY = 2.0 * (leftHandTranslation.getY() + rightHandTranslation.getY())/2.0;
+                    dZ = 2.0 * (leftHandTranslation.getZ() + rightHandTranslation.getZ())/2.0;
+
+                    translation.set( origin.get( 0, 3 ) - dX, 0, 3 );
+                    translation.set( origin.get( 1, 3 ) - dY, 1, 3 );
+                    translation.set( origin.get( 2, 3 ) - dZ, 2, 3 );
+
+                    display.getTransformEventHandler().setTransform(translation);
+                    transformChanged(translation);
+                }
+            }
+
+
+            // if we have one hand, rotate
+            if (leapFrame.hands().count() == 1) {
 
                 // if first hand is closed, skip the frame to enable the user to
                 // move the hand out of the control area without further movement
@@ -667,33 +707,34 @@ public class SpimViewer implements OverlayRenderer, TransformListener3D, Painter
                 if(Math.abs(handTranslation.getX()) > 40.0 || Math.abs(handTranslation.getY()) > 40.0 || Math.abs(handTranslation.getZ()) > 40) {
                     previousLeapFrame = Frame.invalid();
                     return;
-                } else {
-                    rotation.set(origin);
-
-                    // center shift, TODO: check if this has to be done for Z as well?
-                    rotation.set( rotation.get( 0, 3 ) - frame.getWidth()/2., 0, 3 );
-                    rotation.set( rotation.get( 1, 3 ) - frame.getHeight()/2, 1, 3 );
-
-                    // zoom / Z translation
-                    rotation.set( rotation.get( 2, 3 ) - handTranslation.getZ(), 2, 3 );
-
-                    // rotation - InteractiveDisplay3DCanvas' and Leap Motion's coordinate systems
-                    // are different!
-                    // TODO: rotate around center of the image, not origin of image.
-                    double xAngle = -handTranslation.getX() * Math.PI/180.0f;
-                    double yAngle = -handTranslation.getY() * Math.PI/180.0f;
-
-                    rotation.rotate(0, yAngle);
-                    rotation.rotate(1, xAngle);
-
-                    // center un-shift
-                    rotation.set( rotation.get( 0, 3 ) + frame.getWidth()/2, 0, 3 );
-                    rotation.set( rotation.get( 1, 3 ) + frame.getHeight()/2, 1, 3 );
-
-                    // write out affine transform and apply
-                    display.getTransformEventHandler().setTransform( rotation );
-                    transformChanged( rotation );
                 }
+
+                rotation.set(origin);
+
+                // center shift, TODO: check if this has to be done for Z as well?
+                rotation.set( rotation.get( 0, 3 ) - frame.getWidth()/2., 0, 3 );
+                rotation.set( rotation.get( 1, 3 ) - frame.getHeight()/2, 1, 3 );
+
+                // zoom / Z translation
+                rotation.set( rotation.get( 2, 3 ) - handTranslation.getZ(), 2, 3 );
+
+                // rotation - InteractiveDisplay3DCanvas' and Leap Motion's coordinate systems
+                // are different!
+                // TODO: rotate around center of the image, not origin of image.
+                double xAngle = -handTranslation.getX() * Math.PI/180.0f;
+                double yAngle = -handTranslation.getY() * Math.PI/180.0f;
+
+                rotation.rotate(0, yAngle);
+                rotation.rotate(1, xAngle);
+
+                // center un-shift
+                rotation.set( rotation.get( 0, 3 ) + frame.getWidth()/2, 0, 3 );
+                rotation.set( rotation.get( 1, 3 ) + frame.getHeight()/2, 1, 3 );
+
+                // write out affine transform and apply
+                display.getTransformEventHandler().setTransform( rotation );
+                transformChanged( rotation );
+
             }
 
             // save frame for further calculations
