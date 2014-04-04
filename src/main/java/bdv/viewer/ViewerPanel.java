@@ -27,6 +27,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.leapmotion.leap.Controller;
 import net.imglib2.Positionable;
 import net.imglib2.RealPoint;
 import net.imglib2.RealPositionable;
@@ -56,6 +57,9 @@ import bdv.viewer.state.SourceGroup;
 import bdv.viewer.state.SourceState;
 import bdv.viewer.state.ViewerState;
 import bdv.viewer.state.XmlIoViewerState;
+
+import bdv.viewer.LeapMotionListener;
+import com.leapmotion.leap.Controller;
 
 
 /**
@@ -121,6 +125,17 @@ public class ViewerPanel extends JPanel implements OverlayRenderer, TransformLis
 	 * the current global position (see {@link #getGlobalMouseCoordinates(RealPositionable)}).
 	 */
 	protected final MouseCoordinateListener mouseCoordinates;
+
+    /**
+     * Keeps track of the current Leap Motion state when used with the Leap Motion
+     * gesture controller
+     */
+    protected final LeapMotionListener leapMotionListener;
+
+    /**
+     * The Controller to which the LeapMotionListener is attached to.
+     */
+    final protected Controller leapController;
 
 	/**
 	 * Manages visibility and currentness of sources and groups, as well as
@@ -290,7 +305,12 @@ public class ViewerPanel extends JPanel implements OverlayRenderer, TransformLis
 		mouseCoordinates = new MouseCoordinateListener();
 		display.addHandler( mouseCoordinates );
 
-		add( display, BorderLayout.CENTER );
+        leapMotionListener = new LeapMotionListener(this, display);
+        leapController = new Controller();
+        display.addHandler( leapMotionListener );
+        leapController.addListener(leapMotionListener);
+
+		add(display, BorderLayout.CENTER);
 		if ( numTimePoints > 1 )
 		{
 			sliderTime = new JSlider( JSlider.HORIZONTAL, 0, numTimePoints - 1, 0 );

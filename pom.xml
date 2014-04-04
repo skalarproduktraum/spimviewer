@@ -19,6 +19,11 @@
     <description>A viewer for multi-angle images, especially SPIM images</description>
 
 	<dependencies>
+        <dependency>
+            <groupId>com.leapmotion.leap</groupId>
+            <artifactId>leapMotion</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 		<dependency>
 			<groupId>net.imagej</groupId>
 			<artifactId>ij</artifactId>
