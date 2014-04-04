@@ -38,7 +38,7 @@ import net.imglib2.RealPoint;
 import net.imglib2.RealPositionable;
 import net.imglib2.realtransform.AffineTransform3D;
 import net.imglib2.ui.TransformEventHandler3D;
-import net.imglib2.ui.TransformListener3D;
+import net.imglib2.ui.TransformListener;
 import net.imglib2.util.LinAlgHelpers;
 import net.imglib2.util.ValuePair;
 import viewer.TextOverlayAnimator.TextPosition;
@@ -60,7 +60,7 @@ import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.Gesture.State;
 
 
-public class SpimViewer implements OverlayRenderer, TransformListener3D, PainterThread.Paintable
+public class SpimViewer implements OverlayRenderer, TransformListener, PainterThread.Paintable
 {
 	protected ViewerState state;
 
@@ -621,12 +621,7 @@ public class SpimViewer implements OverlayRenderer, TransformListener3D, Painter
 
         public void onConnect(Controller controller) {
             debugPrint("LeapMotionListener: Connected");
-            /*
             controller.enableGesture(Gesture.Type.TYPE_SWIPE);
-            controller.enableGesture(Gesture.Type.TYPE_CIRCLE);
-            controller.enableGesture(Gesture.Type.TYPE_SCREEN_TAP);
-            controller.enableGesture(Gesture.Type.TYPE_KEY_TAP);
-            */
         }
 
         public void onDisconnect(Controller controller) {
@@ -651,6 +646,16 @@ public class SpimViewer implements OverlayRenderer, TransformListener3D, Painter
                 previousLeapFrame = Frame.invalid();
                 return;
             }
+
+            // gesture handling
+            GestureList gestures = leapFrame.gestures();
+            for (int i = 0; i <= gestures.count(); i++) {
+                Gesture gesture = gestures.get(i);
+                if(gesture.type() == Gesture.Type.TYPE_SWIPE) {
+                    sliderTime.setValue( sliderTime.getValue() + 1 );
+                }
+            }
+
 
             // if we have one hand, rotate
             if (leapFrame.hands().count() == 1) {
