@@ -302,7 +302,7 @@ public class BigDataViewer
 
 	public static void main( final String[] args )
 	{
-        final String fn = "/Users/ulrik/Code/mpicbg/drosophila/export.xml";
+        final String fn = "/Volumes/watson/mpicbg/Drosophila/111010_weber/combined.xml";
 //		final String fn = "/Users/pietzsch/desktop/data/BDV130418A325/BDV130418A325_NoTempReg.xml";
 //		final String fn = "/Users/pietzsch/Desktop/data/valia2/valia.xml";
 //		final String fn = "/Users/pietzsch/workspace/data/fast fly/111010_weber/combined.xml";
